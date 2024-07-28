@@ -1,0 +1,1 @@
+# The aim of this project is to create an application with modern UI features such as buttons, frames, labels etc which can predict the symptoms of a heart disease in an individual by using Machine Learning.
