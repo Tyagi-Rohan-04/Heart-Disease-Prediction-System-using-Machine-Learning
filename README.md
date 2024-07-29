@@ -1,7 +1,7 @@
 # The aim of this project is to create an application with modern UI features such as buttons, frames, labels etc which can predict the symptoms of a heart disease in an individual by using Machine Learning.
 <br>
 <h3>Information regarding the datset.</h3>
-age: age in years
+age: age in years <br>
 sex: sex(1=male, 0=female)
 cp: chest pain type(0=typical angina, 1=atypical angina, 2=non-anginal pain, 3=asymptomatic)
 chol: serum cholestrolin mg/dl (in mm Hg on admission to the hospital)
