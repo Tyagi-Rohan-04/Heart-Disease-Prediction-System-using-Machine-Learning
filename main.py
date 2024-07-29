@@ -26,6 +26,44 @@ root.config(bg=background)
 
 #########################################################################################################################
 
+# info window (operated by info button)
+def Info():
+    Icon_window = Toplevel(root)
+    Icon_window.title("Info")
+    Icon_window.geometry("700x600+400+100")
+
+    # icon image
+    icon_image = PhotoImage(file="Images/info.png")
+    Icon_window.iconphoto(False, icon_image)
+
+    # Heading
+    Label(Icon_window, text="Information related to the dataset", font="robot 17 bold").pack(padx=20, pady=20)
+
+    # Info
+    Label(Icon_window, text="age: age in years", font="arial 11").place(x=20, y=100)
+    Label(Icon_window, text="sex: sex(1=male, 0=female)", font="arial 11").place(x=20, y=130)
+    Label(Icon_window, text="cp: chest pain type(0=typical angina, 1=atypical angina, 2=non-anginal pain, 3=asymptomatic)", font="arial 11").place(x=20, y=160)
+    Label(Icon_window, text="trestbps: resting blood pressure (in mm Hg on admission to the hospital)", font="arial 11").place(x=20, y=190)
+    Label(Icon_window, text="chol: serum cholestrolin mg/dl (in mm Hg on admission to the hospital)", font="arial 11").place(x=20, y=220)
+    Label(Icon_window, text="fbs: fasting blood sugar > 120mg/dl (1=true, 0=false)", font="arial 11").place(x=20, y=250)
+    Label(Icon_window, text="restecg: resting electrocardiographic results (0=normal, 1=having ST-T, 2=hypertrophy)", font="arial 11").place(x=20, y=280)
+    Label(Icon_window, text="thalach: maximum heart rate achieved", font="arial 11").place(x=20, y=310)
+    Label(Icon_window, text="exang: exercise induced angina (1=yes, 0=no)", font="arial 11").place(x=20, y=340)
+    Label(Icon_window, text="oldpeak: ST depression induced by exercise relative to rest", font="arial 11").place(x=20, y=370)
+    Label(Icon_window, text="slope: the slope of the peak exercise ST segment (0=upsloping, 1=flat, 2=downsloping)", font="arial 11").place(x=20, y=400)
+    Label(Icon_window, text="ca: number of major vessels (0-3) colored by flourosopy", font="arial 11").place(x=20, y=430)
+    Label(Icon_window, text="thal: 0=normal, 1=fixed defect, 2=reversable defect", font="arial 11").place(x=20, y=460)
+
+    Icon_window.mainloop()
+
+#########################################################################################################################
+
+# A function to exit the application
+def logout():
+    root.destroy()
+
+#########################################################################################################################
+
 # icon (1)
 image_icon = PhotoImage(file="Images/icon.png")
 root.iconphoto(False, image_icon)
@@ -236,7 +274,7 @@ Button(root, image=analysis_button, bg=background, cursor='hand2', bd=0).place(x
 
 # info button
 info_button = PhotoImage(file="Images/info.png")
-Button(root, image=info_button, bg=background, cursor='hand2', bd=0).place(x=10, y=240)
+Button(root, image=info_button, bg=background, cursor='hand2', bd=0, command=Info).place(x=10, y=240)
 
 # save button
 save_button = PhotoImage(file="Images/save.png")
@@ -274,7 +312,7 @@ mode.place(x=350, y=495)
 
 # Logout Button (12)
 logout_icon = PhotoImage(file="Images/logout.png")
-logout_button = Button(root, image=logout_icon, bg="#df2d4b", cursor="hand2", bd=0)
+logout_button = Button(root, image=logout_icon, bg="#df2d4b", cursor="hand2", bd=0, command=logout)
 logout_button.place(x=1405, y=10)
 
 #########################################################################################################################
