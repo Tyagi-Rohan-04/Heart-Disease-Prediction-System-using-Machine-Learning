@@ -9,6 +9,7 @@ import matplotlib
 from tkinter import messagebox
 
 from backend import *  # importing the ML model from the other file
+from MySQL import *    # 
 
 matplotlib.use("TkAgg")
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
@@ -29,6 +30,8 @@ root.config(bg=background)
 
 # Analysis
 def Analysis():
+    global prediction
+
     name = Name.get()
     D1 = Date.get()
     today = datetime.date.today()
@@ -207,6 +210,85 @@ def Clear():
     chol.get('')
     thalach.set('')
     oldpeak.set('')
+
+# Function to save the report.
+
+def Save():
+    B2 = Name.get()
+    C2 = Date.get()
+    D2 = DOB.get()
+
+    today = datetime.date.today()
+    E2 = today.year-DOB.get()
+
+    try:
+        F2 = selection()
+    except:
+        messagebox.showerror("Missing Data", " Plese select gender!")
+
+    try:
+        J2 = selection2()
+    except:
+        messagebox.showerror("Missing Data", " Plese select fbs!")
+
+    try:
+        M2 = selection3()
+    except:
+        messagebox.showerror("Missing Data", " Plese select Exang!")
+
+    try:
+        G2 = selection4()
+    except:
+        messagebox.showerror("Missing Data", " Plese select cp!")
+
+    try:
+        K2 = restecg_combobox.get()
+    except:
+        messagebox.showerror("Missing Data", " Plese select restecg!")
+
+    try:
+        O2 = selection5()
+    except:
+        messagebox.showerror("Missing Data", " Plese select slope!")
+
+    try:
+        P2 = ca_combobox.get()
+    except:
+        messagebox.showerror("Missing Data", " Plese select ca!")
+
+    try:
+        Q2 = thal_combobox.get()
+    except:
+        messagebox.showerror("Missing Data", " Plese select thal!")
+
+    H2 = trestbps.get()
+    I2 = chol.get()
+    L2 = thalach.get()
+    N2 = float(oldpeak.get())
+
+    print(B2)
+    print(C2)
+    print(D2)
+    print(E2)
+    print(F2)
+    print(G2)
+    print(H2)
+    print(I2)
+    print(J2)
+    print(K2)
+    print(L2)
+    print(M2)
+    print(N2)
+    print(O2)
+    print(P2)
+    print(Q2)
+
+    Save_Data_MySql(B2, C2, int(D2), int(E2), int(F2), int(G2), int(H2), int(I2), int(J2), int(K2), int(L2), int(M2), int(N2), int(O2), int(P2), int(Q2), int(prediction[0]))
+
+    Clear()
+
+    root.destroy()
+    os.system("main.py")
 
 #########################################################################################################################
 
@@ -424,7 +506,7 @@ Button(root, image=info_button, bg=background, cursor='hand2', bd=0, command=Inf
 
 # save button
 save_button = PhotoImage(file="Images/save.png")
-Button(root, image=save_button, bg=background, cursor='hand2', bd=0).place(x=1370, y=250)
+Button(root, image=save_button, bg=background, cursor='hand2', bd=0, command=Save).place(x=1370, y=250)
 
 #########################################################################################################################
 
