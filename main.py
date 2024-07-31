@@ -6,6 +6,9 @@ import tkinter as tk
 from tkinter import ttk
 import os
 import matplotlib
+from tkinter import messagebox
+
+from backend import *  # importing the ML model from the other file
 
 matplotlib.use("TkAgg")
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
@@ -24,6 +27,142 @@ root.geometry("1450x730+60+80")
 root.resizable(False, False)
 root.config(bg=background)
 
+# Analysis
+def Analysis():
+    name = Name.get()
+    D1 = Date.get()
+    today = datetime.date.today()
+    A = today.year-DOB.get()
+
+    try:
+        B = selection()
+    except:
+        messagebox.showerror("missing", "Please select gender !!")
+        return
+    
+    try:
+        F = selection2()
+    except:
+        messagebox.showerror("missing", "Please select fbs !!")
+        return
+    
+    try:
+        I = selection3()
+    except:
+        messagebox.showerror("missing", "Please select exang !!")
+        return
+    
+    try:
+        C = int(selection4())
+    except:
+        messagebox.showerror("missing", "Please select chol !!")
+        return
+    
+    try:
+        G = int(restecg_combobox.get())
+    except:
+        messagebox.showerror("missing", "Please select restecg !!")
+        return
+    
+    try:
+        K = int(selection5())
+    except:
+        messagebox.showerror("missing", "Please select slope !!")
+        return
+    
+    try:
+        L = int(ca_combobox.get())
+    except:
+        messagebox.showerror("missing", "Please select ca !!")
+        return
+    
+    try:
+        M = int(thal_combobox.get())
+    except:
+        messagebox.showerror("missing", "Please select thal !!")
+        return
+    
+    try:
+        D = int(trestbps.get())
+        E = int(chol.get())
+        H = int(thalach.get())
+        J = int(oldpeak.get())
+    except:
+        messagebox.showerror("missing data", "Few missing data entry !!")
+        return
+    
+    print("A is age:",A)
+    print("B is gender:",B)
+    print("C is cp:",C)
+    print("D is trestbps:",D)
+    print("E is chol:",E)
+    print("F is fbs:",F)
+    print("G is restecg:",G)
+    print("H is thalach:",H)
+    print("I is Exang:",I)
+    print("J is oldpeak::",J)
+    print("K is slope:",K)
+    print("L is ca:",L)
+    print("M is thal:",M)
+
+    # First Graph
+    f = Figure(figsize=(5,5), dpi=100)
+    a = f.add_subplot(111)
+    a.plot(["Sex","fbs","exang"],[B,F,I])
+    canvas = FigureCanvasTkAgg(f)
+    canvas.get_tk_widget().pack(side=tk.BOTTOM, fill=tk.BOTH, expand=True)
+    canvas._tkcanvas.place(width=250, height=250, x=600, y=240)
+
+    # Second Graph
+    f2 = Figure(figsize=(5,5), dpi=100)
+    a2 = f2.add_subplot(111)
+    a2.plot(["age","trestbps","chol","thalach"],[A,D,E,H])
+    canvas2 = FigureCanvasTkAgg(f2)
+    canvas2.get_tk_widget().pack(side=tk.BOTTOM, fill=tk.BOTH, expand=True)
+    canvas2._tkcanvas.place(width=250, height=250, x=860, y=240)
+
+    # Third Graph
+    f3 = Figure(figsize=(5,5), dpi=100)
+    a3 = f3.add_subplot(111)
+    a3.plot(["oldpeak","restecg","cp"],[J,G,C])
+    canvas3 = FigureCanvasTkAgg(f3)
+    canvas3.get_tk_widget().pack(side=tk.BOTTOM, fill=tk.BOTH, expand=True)
+    canvas3._tkcanvas.place(width=250, height=250, x=600, y=470)
+
+    # Fourth Graph
+    f4 = Figure(figsize=(5,5), dpi=100)
+    a4 = f4.add_subplot(111)
+    a4.plot(["slope","ca","thal"],[K,L,M])
+    canvas4 = FigureCanvasTkAgg(f4)
+    canvas4.get_tk_widget().pack(side=tk.BOTTOM, fill=tk.BOTH, expand=True)
+    canvas4._tkcanvas.place(width=250, height=250, x=860, y=470)
+
+#########################################################################################################################
+
+# Machine Learning Model
+
+    # input data
+    input_data = (A, B, C, D, E, F, G, H, I, J, K, L, M)
+
+    input_data_as_numpy_array = np.asanyarray(input_data)
+
+    # reshape the numpy array as we are predicting for only on instance
+    input_data_reshape = input_data_as_numpy_array.reshape(1, -1)
+
+    prediction = model.predict (input_data_reshape)
+    print(prediction[0])
+
+    
+    if(prediction[0]==0):
+        print('The person does not have a Heart Disease.')
+        report.config(text=f"Report:{0}", fg="#8dc63f")
+        report1.config(text=f"{name}, you do not have a heart disease.")
+    else:
+        print('The person has a Heart Disease.')
+        report.config(text=f"Report:{1}", fg="#ed1c24")
+        report1.config(text=f"{name}, you have a heart disease.")
+    
+    
 #########################################################################################################################
 
 # info window (operated by info button)
@@ -56,11 +195,18 @@ def Info():
 
     Icon_window.mainloop()
 
-#########################################################################################################################
-
 # A function to exit the application
 def logout():
     root.destroy()
+
+# Clear (with the help of clear we can clear multiple fields at once)
+def Clear():
+    Name.get('')
+    DOB.get('')
+    trestbps.get('')
+    chol.get('')
+    thalach.set('')
+    oldpeak.set('')
 
 #########################################################################################################################
 
@@ -102,7 +248,7 @@ date_entry = Entry(Heading_entry, textvariable=Date, width=15, font="arial 15", 
 date_entry.place(x=440, y=45)
 Date.set(d1)
 
-Name = IntVar()
+Name = StringVar()
 name_entry = Entry(Heading_entry, textvariable=Name, width=20, font="arial 20", bg="#ededed", fg="#222222", bd=0)
 name_entry.place(x=30, y=130)
 
@@ -270,7 +416,7 @@ Label(image=graph_image).place(x=860, y=500)
 
 # Analysis Button (10)
 analysis_button = PhotoImage(file="Images/Analysis.png")
-Button(root, image=analysis_button, bg=background, cursor='hand2', bd=0).place(x=1130, y=240)
+Button(root, image=analysis_button, bg=background, cursor='hand2', bd=0, command=Analysis).place(x=1130, y=240)
 
 # info button
 info_button = PhotoImage(file="Images/info.png")
